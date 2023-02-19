@@ -1,15 +1,18 @@
-import { Button } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 
 export default function GetTicketButton(props) {
     return (
         <Button 
             sx={{width: "-webkit-fill-available"}} 
-            startIcon={<ConfirmationNumberIcon />} 
             size="large" 
-            variant="contained"
+            variant="outlined"
+            color="inherit"
             onClick={props.getTicket}>
-            Get Ticket
+            <Stack direction="column" alignItems="center" justifyContent={"center"}>
+                <ConfirmationNumberIcon />
+                <Typography>Get Ticket</Typography>
+            </Stack>
         </Button>
     )
 }
