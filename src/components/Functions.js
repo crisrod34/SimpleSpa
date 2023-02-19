@@ -5,7 +5,7 @@ import {
     Grid }
     from '@mui/material';
 
-const BarcodeEntryTime = new Map(JSON.parse(localStorage.getItem('BarcodeEntryTime')));
+const customers = new Map(JSON.parse(localStorage.getItem('customers')));
 
 class Functions extends Component {
 
@@ -17,16 +17,29 @@ class Functions extends Component {
     }
 
     submitCalculatePrice = (barcode) => {
-        this.calculatePrice(barcode);
+        return this.calculatePrice(barcode);
+    }
+
+    submitPaymentChoice = (barcode, paymentMethod) => {
+        this.payTicket(barcode, paymentMethod);
     }
     
     // Business logic
     getTicket = () => {
-        let barcode = (Math.random() + ' ').substring(2, 10) + (Math.random() + ' ').substring(2, 10);
-        BarcodeEntryTime.set(barcode, Date.now());
-        console.log(BarcodeEntryTime.entries());
-        localStorage.setItem('BarcodeEntryTime', JSON.stringify(Array.from(BarcodeEntryTime.entries())));
-        return barcode
+        if (customers.size >= 60) {
+            console.log("Sorry, the spa is currently full");
+            return null;
+        }
+        let newTicket = (Math.random() + ' ').substring(2, 10) + (Math.random() + ' ').substring(2, 10);
+        customers.set(newTicket, {
+            entryTime: Date.now(),
+            ticketPaid: false,
+            timePaid: null,
+            paymentMethod: null
+        });
+        console.log(customers);
+        localStorage.setItem('customers', JSON.stringify(Array.from(customers.entries())));
+        return newTicket;
     }
 
     calculatePrice = (barcode) => {
@@ -35,20 +48,45 @@ class Functions extends Component {
             barcode = barcode.toString();
         }
 
-        if (BarcodeEntryTime.get(barcode)) {
-            let totalTime = (((Date.now() - BarcodeEntryTime.get(barcode)) / 1000) / 60) / 60;
+        let customer = customers.get(barcode);
 
-            if (totalTime <= 3) {
-                console.log("Payment: $30")
-                return 30
+        if (customer) {
+            if (customer["ticketPaid"]) {
+                return 0;
             } else {
-                let remainder = Math.ceil(totalTime - 3);
-                console.log("Payment: $" + (30 + (remainder * 3)).toString());
-                return 30 + (remainder * 3);
+                let totalTime = (((Date.now() - customer["entryTime"]) / 1000) / 60) / 60;
+
+                if (totalTime <= 3) {
+                    console.log("Payment: $30")
+                    return 30
+                } else {
+                    let remainder = Math.ceil(totalTime - 3);
+                    console.log("Payment: $" + (30 + (remainder * 3)).toString());
+                    return 30 + (remainder * 3);
+                }
             }
         } else {
             console.log("Barcode Invalid");
             return null;
+        }
+    }
+
+    payTicket = (barcode, paymentMethod) => {
+        // Allow for easy input from console
+        if (typeof barcode == 'number' || barcode instanceof Number) {
+            barcode = barcode.toString();
+        }
+
+        let customer = customers.get(barcode);
+        if (customer["ticketPaid"]) {
+            return "Ticket already paid for"
+        } else {
+            customer["ticketPaid"] = true;
+            customer["paymentMethod"] = paymentMethod;
+            customer["timePaid"] = Date.now();
+            customers.set(barcode, customer);
+            localStorage.setItem('customers', JSON.stringify(Array.from(customers.entries())));
+            return "Ticket " + barcode + " paid successfully";
         }
 
     }
@@ -56,6 +94,7 @@ class Functions extends Component {
     componentDidMount() {
         window.getTicket = this.getTicket;
         window.calculatePrice = this.calculatePrice;
+        window.payTicket = this.payTicket;
     }
 
     render() {
@@ -72,6 +111,7 @@ class Functions extends Component {
                 <CalculatePriceButton
                     childToParent={this.childToParent}
                     submitCalculatePrice={this.submitCalculatePrice}
+                    submitPaymentChoice={this.submitPaymentChoice}
                 />
             </Grid>
           </Grid>

@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Button, Stack, TextField, Typography } from '@mui/material';
 import PriceCheckIcon from '@mui/icons-material/PriceCheck';
 import CancelIcon from '@mui/icons-material/Cancel';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import LocalAtmIcon from '@mui/icons-material/LocalAtm';
 
-export default function GetTicketButton({submitCalculatePrice}) {
+export default function GetTicketButton({submitCalculatePrice, submitPaymentChoice}) {
 
     const [barcode, setBarcode] = useState("");
 
@@ -14,16 +16,22 @@ export default function GetTicketButton({submitCalculatePrice}) {
     };
     
     const handleSubmit = () => {
-        submitCalculatePrice(barcode);
+        if (submitCalculatePrice(barcode)) {
+            setState("choose-payment-method");
+        }
     };
 
     const handleEnter = (e) => {
         if(e.keyCode == 13){
             e.preventDefault();
             handleSubmit();
-            setState("button");
         }
     };
+
+    const handlePaymentChoice = (paymentMethod) => {
+        submitPaymentChoice(barcode, paymentMethod);
+        setState("button");
+    }
     
     return (
         <main>
@@ -36,10 +44,9 @@ export default function GetTicketButton({submitCalculatePrice}) {
                     onClick={() => {setState("enter-barcode")}}>
                     <Stack direction="column" alignItems="center" justifyContent={"center"}>
                         <PriceCheckIcon />
-                        <Typography>Calculate Price</Typography>
+                        <Typography>Begin Payment</Typography>
                     </Stack>
-                </Button>   
-                
+                </Button>
             )}
             {state == "enter-barcode" && (
                 <Stack
@@ -69,6 +76,53 @@ export default function GetTicketButton({submitCalculatePrice}) {
                             <Typography>Cancel</Typography>
                         </Stack>
                     </Button>  
+                </Stack>
+            )}
+            {state == "choose-payment-method" && (
+                <Stack
+                    direction="column"
+                    spacing={2}
+                    justifyContent="center"
+                    maxWidth={'100%'}>
+                    <Button 
+                        sx={{
+                            width: "-webkit-fill-available",
+                        }}
+                        color="inherit"
+                        size="large" 
+                        variant="outlined"
+                        onClick={() => {handlePaymentChoice("credit_card")}}>
+                        <Stack direction="column" alignItems="center" justifyContent={"center"}>
+                            <CreditCardIcon />
+                            <Typography>Credit Card</Typography>
+                        </Stack>
+                    </Button> 
+                    <Button 
+                        sx={{
+                            width: "-webkit-fill-available",
+                        }}
+                        color="inherit"
+                        size="large" 
+                        variant="outlined"
+                        onClick={() => {handlePaymentChoice("debit_card")}}>
+                        <Stack direction="column" alignItems="center" justifyContent={"center"}>
+                            <CreditCardIcon />
+                            <Typography>Debit Card</Typography>
+                        </Stack>
+                    </Button>
+                    <Button 
+                        sx={{
+                            width: "-webkit-fill-available",
+                        }}
+                        color="inherit"
+                        size="large" 
+                        variant="outlined"
+                        onClick={() => {handlePaymentChoice("cash")}}>
+                        <Stack direction="column" alignItems="center" justifyContent={"center"}>
+                            <LocalAtmIcon />
+                            <Typography>Cash</Typography>
+                        </Stack>
+                    </Button> 
                 </Stack>
             )}
         </main>
