@@ -1,5 +1,6 @@
 import React from 'react';
 import { css } from '@emotion/react';
+import Functions from '../components/Functions';
 
 const HomePageStyle = css`
   h1 {
@@ -12,7 +13,8 @@ const HomePageStyle = css`
 const HomePage = () => {
   return (
     <div css={[HomePageStyle]}>
-      <h1 className="title">Hello React!</h1>
+      <h1 className="title">Welcome to Simple Spa!</h1>
+      <Functions />
     </div>
   );
 };

@@ -60,12 +60,6 @@ const Header = () => {
   return (
     <header css={[headerStyle]}>
       <nav>
-        <div className="logo">
-          <Link to="/" replace={pathname === '/'}>
-            <LogoIcon />
-            brand
-          </Link>
-        </div>
         <div>
           {isLight ? (
             <SunIcon className="theme" onClick={toggleTheme} />

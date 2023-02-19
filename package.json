@@ -4,7 +4,7 @@
   "description": "React Single Page App template without CRA",
   "main": "src/index.js",
   "hompage": "https://ofnullable.github.io/react-spa-template",
-  "repository": "https://github.com/ofnullable/react-spa-template",
+  "repository": "https://github.com/crisrod34/SimpleSpa",
   "author": "ofnullable <ofnullable@gmail.com>",
   "license": "MIT",
   "engines": {
@@ -23,10 +23,15 @@
     "lint": "eslint src"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.5",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.9",
+    "@mui/material": "^5.11.9",
+    "@mui/styled-engine-sc": "^5.11.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.4"
+    "react-router-dom": "^6.4.4",
+    "styled-components": "^5.3.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.5",

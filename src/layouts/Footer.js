@@ -1,7 +1,7 @@
 import React from 'react';
 import { css } from '@emotion/react';
 import { useThemeContext } from '../contexts/ThemeContext';
-import { ReactComponent as GithubIcon } from '../assets/github.svg';
+import Mail from '@mui/icons-material/Mail';
 
 const footerStyle = css`
   padding: 40px 16px;
@@ -20,22 +20,15 @@ const footerStyle = css`
   }
 `;
 
-const iconStyle = (color) => css`
-  width: 2rem;
-  height: 2rem;
-  stroke: ${color};
-`;
-
 const Footer = () => {
-  const { isLight } = useThemeContext();
 
   return (
     <footer css={[footerStyle]}>
       <nav>
-        <div>{new Date().getFullYear()} &copy; your copyright</div>
+        <div>{new Date().getFullYear()} &copy; Copyright Cristian Rodriguez Zaninovic</div>
         <div>
-          <a href="https://github.com/ofnullable/react-spa-template" rel="noopener noreferrer" target="_blank">
-            <GithubIcon css={iconStyle(isLight ? '#000' : '#fff')} className="github" />
+          <a href=":chrodriguez34@gmail.com" rel="noopener noreferrer" target="_blank">
+            <Mail />
           </a>
         </div>
       </nav>
