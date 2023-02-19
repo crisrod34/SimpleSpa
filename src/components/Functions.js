@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import GetTicketButton from '../buttons/GetTicketButton';
 import CalculatePriceButton from '../buttons/CalculatePriceButton';
+import GetTicketStateButton from '../buttons/GetTicketStateButton';
 import { 
     Grid }
     from '@mui/material';
 
 const customers = new Map(JSON.parse(localStorage.getItem('customers')));
+var activeCustomers = localStorage.getItem('activeCustomers');
 
 class Functions extends Component {
 
@@ -23,22 +25,28 @@ class Functions extends Component {
     submitPaymentChoice = (barcode, paymentMethod) => {
         this.payTicket(barcode, paymentMethod);
     }
+
+    submitGetTicketState = (barcode) => {
+        return this.getTicketState(barcode);
+    }
     
     // Business logic
     getTicket = () => {
-        if (customers.size >= 60) {
+        if (activeCustomers >= 60) {
             console.log("Sorry, the spa is currently full");
             return null;
         }
         let newTicket = (Math.random() + ' ').substring(2, 10) + (Math.random() + ' ').substring(2, 10);
         customers.set(newTicket, {
             entryTime: Date.now(),
-            ticketPaid: false,
+            ticketStatus: "unpaid",
             timePaid: null,
             paymentMethod: null
         });
         console.log(customers);
         localStorage.setItem('customers', JSON.stringify(Array.from(customers.entries())));
+        activeCustomers++;
+        localStorage.setItem('activeCustomers', activeCustomers);
         return newTicket;
     }
 
@@ -51,7 +59,7 @@ class Functions extends Component {
         let customer = customers.get(barcode);
 
         if (customer) {
-            if (customer["ticketPaid"]) {
+            if (customer["ticketStatus"] == "paid") {
                 return 0;
             } else {
                 let totalTime = (((Date.now() - customer["entryTime"]) / 1000) / 60) / 60;
@@ -78,23 +86,44 @@ class Functions extends Component {
         }
 
         let customer = customers.get(barcode);
-        if (customer["ticketPaid"]) {
+        if (customer["ticketStatus"] == "paid") {
             return "Ticket already paid for"
         } else {
-            customer["ticketPaid"] = true;
+            customer["ticketStatus"] = "paid";
             customer["paymentMethod"] = paymentMethod;
             customer["timePaid"] = Date.now();
             customers.set(barcode, customer);
             localStorage.setItem('customers', JSON.stringify(Array.from(customers.entries())));
+            // For the scope of this project, consider that when someone pays, they immediately exit
+            --activeCustomers;
+            localStorage.setItem('activeCustomers', activeCustomers);
             return "Ticket " + barcode + " paid successfully";
         }
 
     }
 
+    getTicketState = (barcode) => {
+        // Allow for easy input from console
+        if (typeof barcode == 'number' || barcode instanceof Number) {
+            barcode = barcode.toString();
+        }
+
+        let customer = customers.get(barcode);
+        console.log(customer);
+        if (customer) {
+            console.log(customer["ticketStatus"]);
+            return customer["ticketStatus"];
+        } else {
+            return null
+        }
+    }
+
+    // Enabling developer console execution
     componentDidMount() {
         window.getTicket = this.getTicket;
         window.calculatePrice = this.calculatePrice;
         window.payTicket = this.payTicket;
+        window.getTicketState = this.getTicketState;
     }
 
     render() {
@@ -109,9 +138,13 @@ class Functions extends Component {
             </Grid>
             <Grid item xs={3}>
                 <CalculatePriceButton
-                    childToParent={this.childToParent}
                     submitCalculatePrice={this.submitCalculatePrice}
                     submitPaymentChoice={this.submitPaymentChoice}
+                />
+            </Grid>
+            <Grid item xs={3}>
+                <GetTicketStateButton 
+                    submitGetTicketState={this.submitGetTicketState}
                 />
             </Grid>
           </Grid>
