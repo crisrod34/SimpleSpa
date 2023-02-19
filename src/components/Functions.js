@@ -1,17 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import GetTicketButton from '../buttons/GetTicketButton';
 import CalculatePriceButton from '../buttons/CalculatePriceButton';
 import GetTicketStateButton from '../buttons/GetTicketStateButton';
-import { 
-    Grid }
-    from '@mui/material';
+import SpaCapacityButton from '../buttons/SpaCapacityButton';
+import { Grid } from '@mui/material';
 
 const customers = new Map(JSON.parse(localStorage.getItem('customers')));
-var activeCustomers = localStorage.getItem('activeCustomers');
+var activeCustomerCount = localStorage.getItem('activeCustomerCount');
 
 class Functions extends Component {
-
-    barcode = "";
 
     // Utility
     childToParent = (childData) => {
@@ -32,7 +29,7 @@ class Functions extends Component {
     
     // Business logic
     getTicket = () => {
-        if (activeCustomers >= 60) {
+        if (activeCustomerCount >= 60) {
             console.log("Sorry, the spa is currently full");
             return null;
         }
@@ -45,8 +42,8 @@ class Functions extends Component {
         });
         console.log(customers);
         localStorage.setItem('customers', JSON.stringify(Array.from(customers.entries())));
-        activeCustomers++;
-        localStorage.setItem('activeCustomers', activeCustomers);
+        activeCustomerCount++;
+        localStorage.setItem('activeCustomerCount', activeCustomerCount);
         return newTicket;
     }
 
@@ -87,7 +84,8 @@ class Functions extends Component {
 
         let customer = customers.get(barcode);
         if (customer["ticketStatus"] == "paid") {
-            return "Ticket already paid for"
+            console.log("Ticket already paid for");
+            return "Ticket already paid for";
         } else {
             customer["ticketStatus"] = "paid";
             customer["paymentMethod"] = paymentMethod;
@@ -95,8 +93,8 @@ class Functions extends Component {
             customers.set(barcode, customer);
             localStorage.setItem('customers', JSON.stringify(Array.from(customers.entries())));
             // For the scope of this project, consider that when someone pays, they immediately exit
-            --activeCustomers;
-            localStorage.setItem('activeCustomers', activeCustomers);
+            --activeCustomerCount;
+            localStorage.setItem('activeCustomerCount', activeCustomerCount);
             return "Ticket " + barcode + " paid successfully";
         }
 
@@ -118,12 +116,17 @@ class Functions extends Component {
         }
     }
 
+    getFreeSpaces = () => {
+        return 60 - activeCustomerCount;
+    }
+
     // Enabling developer console execution
     componentDidMount() {
         window.getTicket = this.getTicket;
         window.calculatePrice = this.calculatePrice;
         window.payTicket = this.payTicket;
         window.getTicketState = this.getTicketState;
+        window.getFreeSpaces = this.getFreeSpaces;
     }
 
     render() {
@@ -146,6 +149,9 @@ class Functions extends Component {
                 <GetTicketStateButton 
                     submitGetTicketState={this.submitGetTicketState}
                 />
+            </Grid>
+            <Grid item xs={3}>
+                <SpaCapacityButton capacity={60 - activeCustomerCount}/>
             </Grid>
           </Grid>
         );

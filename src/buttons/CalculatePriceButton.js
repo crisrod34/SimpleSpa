@@ -32,7 +32,7 @@ export default function GetTicketButton({submitCalculatePrice, submitPaymentChoi
         submitPaymentChoice(barcode, paymentMethod);
         setState("button");
     }
-    
+
     return (
         <main>
             {state == "button" && (
@@ -60,6 +60,7 @@ export default function GetTicketButton({submitCalculatePrice, submitPaymentChoi
                         placeholder="16 Digit Barcode"
                         variant="outlined"
                         fullWidth
+                        size="large"
                         onKeyDown={handleEnter}
                         onChange={handleChange}>
                     </TextField>

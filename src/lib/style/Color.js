@@ -63,7 +63,7 @@ export const Color = {
     'border-layer-strong': '',
     'border-layer-disabled': '',
 
-    'text-primary': '#fafafa',
+    'text-primary': '#F9F6EE',
     'text-secondary': '',
     'text-placeholder': '',
     'text-on-primary': '',
