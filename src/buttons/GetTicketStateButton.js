@@ -57,6 +57,16 @@ export default function GetTicketButton({submitGetTicketState}) {
                         onChange={handleChange}>
                     </TextField>
                     <Button 
+                        sx={{width: "-webkit-fill-available"}} 
+                        size="large" 
+                        variant="outlined"
+                        color="inherit"
+                        onClick={() => {handleSubmit()}}>
+                        <Stack direction="column" alignItems="center" justifyContent={"center"}>
+                            <Typography>Submit</Typography>
+                        </Stack>
+                    </Button> 
+                    <Button 
                         sx={{
                             width: "-webkit-fill-available",
                         }}

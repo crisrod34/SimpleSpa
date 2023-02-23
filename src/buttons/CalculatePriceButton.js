@@ -65,6 +65,16 @@ export default function GetTicketButton({submitCalculatePrice, submitPaymentChoi
                         onChange={handleChange}>
                     </TextField>
                     <Button 
+                        sx={{width: "-webkit-fill-available"}} 
+                        size="large" 
+                        variant="outlined"
+                        color="inherit"
+                        onClick={() => {handleSubmit()}}>
+                        <Stack direction="column" alignItems="center" justifyContent={"center"}>
+                            <Typography>Submit</Typography>
+                        </Stack>
+                    </Button>  
+                    <Button 
                         sx={{
                             width: "-webkit-fill-available",
                         }}
@@ -123,7 +133,20 @@ export default function GetTicketButton({submitCalculatePrice, submitPaymentChoi
                             <LocalAtmIcon />
                             <Typography>Cash</Typography>
                         </Stack>
-                    </Button> 
+                    </Button>
+                    <Button 
+                        sx={{
+                            width: "-webkit-fill-available",
+                        }}
+                        color="error"
+                        size="large" 
+                        variant="contained"
+                        onClick={() => {setState("button")}}>
+                        <Stack direction="column" alignItems="center" justifyContent={"center"}>
+                            <CancelIcon />
+                            <Typography>Cancel</Typography>
+                        </Stack>
+                    </Button>  
                 </Stack>
             )}
         </main>

@@ -8,6 +8,7 @@ import {
 export default function SpaCapacityButton({capacity}) {
     return (
         <Button 
+            disableRipple
             sx={{width: "-webkit-fill-available"}} 
             size="large" 
             variant="outlined"
