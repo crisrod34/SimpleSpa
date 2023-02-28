@@ -1,6 +1,5 @@
 import React from 'react';
 import { css } from '@emotion/react';
-import { useThemeContext } from '../contexts/ThemeContext';
 import Mail from '@mui/icons-material/Mail';
 
 const footerStyle = css`
@@ -27,7 +26,7 @@ const Footer = () => {
       <nav>
         <div>{new Date().getFullYear()} &copy; Copyright Cristian Rodriguez Zaninovic</div>
         <div>
-          <a href=":chrodriguez34@gmail.com" rel="noopener noreferrer" target="_blank">
+          <a href="mailto:chrodriguez34@gmail.com" rel="noopener noreferrer" target="_blank">
             <Mail />
           </a>
         </div>

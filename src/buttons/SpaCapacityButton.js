@@ -1,9 +1,5 @@
 import GroupsIcon from '@mui/icons-material/Groups';
-import {
-    Button,
-    Stack,
-    Typography }
-    from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 
 export default function SpaCapacityButton({capacity}) {
     return (

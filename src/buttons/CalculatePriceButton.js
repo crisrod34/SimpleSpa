@@ -16,7 +16,7 @@ export default function GetTicketButton({submitCalculatePrice, submitPaymentChoi
     };
     
     const handleSubmit = () => {
-        if (submitCalculatePrice(barcode) != null) {
+        if (submitCalculatePrice(barcode) > 0) {
             setState("choose-payment-method");
         }
     };

@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import GetTicketButton from '../buttons/GetTicketButton';
 import CalculatePriceButton from '../buttons/CalculatePriceButton';
 import GetTicketStateButton from '../buttons/GetTicketStateButton';
@@ -13,11 +13,6 @@ export default function Functions() {
     const [activeCustomerCount, setActiveCustomerCount] = useState(_activeCustomerCount);
     const [message, setMessage] = useState("");
 
-    // Utility
-    const childToParent = (childData) => {
-        barcode = childData;
-    }
-
     const submitCalculatePrice = (barcode) => {
         return calculatePrice(barcode);
     }
@@ -30,7 +25,8 @@ export default function Functions() {
         return getTicketState(barcode);
     }
     
-    // Business logic
+    // Begin Business logic //////////////////////////////////////////////////////////
+
     const getTicket = () => {
         if (activeCustomerCount >= 60) {
             console.log("Sorry, the spa is currently full");
@@ -81,7 +77,7 @@ export default function Functions() {
         } else {
             console.log("Barcode Invalid");
             setMessage("Barcode Invalid");
-            return null;
+            return -1;
         }
     }
 
@@ -126,6 +122,8 @@ export default function Functions() {
             setMessage("Ticket " + barcode + " is: " + customer["ticketStatus"]);
             return customer["ticketStatus"];
         } else {
+            console.log("Barcode Invalid");
+            setMessage("Barcode Invalid");
             return null
         }
     }
@@ -133,6 +131,8 @@ export default function Functions() {
     const getFreeSpaces = () => {
         return 60 - activeCustomerCount;
     }
+
+    ////////////////////////////////////////////////////////////////////////////
 
     // Enabling developer console execution
     useEffect(() =>  {
@@ -146,7 +146,14 @@ export default function Functions() {
 
     return (
         <main>
-            <Typography align="center" variant="h4">{message}</Typography>
+            <Typography 
+                align="center"
+                variant="h4"
+                sx={{
+                    pb: "1rem"
+                }}>
+                {message}
+            </Typography>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                 <Grid item xs={3}>
                     <GetTicketButton 
