@@ -93,7 +93,6 @@ export default function Functions() {
             setMessage("Ticket already paid")
             return "Ticket already paid for";
         } else {
-            localStorage.setItem('activeCustomerCount', activeCustomerCount);
             customer["ticketStatus"] = "paid";
             customer["paymentMethod"] = paymentMethod;
             customer["timePaid"] = Date.now();
